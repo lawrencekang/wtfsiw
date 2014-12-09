@@ -1,9 +1,77 @@
-{% if users %}
-    <ul>
-    {% for user in users %}
-        <li><a href="/index/{{ user.id }}/">{{ user.first_name }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No users are available.</p>
-{% endif %}
+<html>
+<head>
+  <title>Search</title>
+  <h1>Where the F^@$ Should I Work?</h1>
+
+</head>
+<body>
+    <form action="/wtfsiw/query/" method="post">
+        {% csrf_token %}
+        <input type="text" name="location-input">
+        <input type="submit" value="Search">
+    </form>
+    <div id="demo"> </div>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+<!-- HTML5 geolocation scripting -->
+<script type="text/javascript">
+  function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        console.log("Why you no position?");
+    }
+  }
+
+  /* Generate CSRF token for AJAX request below */
+  function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !=='') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+              var cookie = jQuery.trim(cookies[i]);
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      console.log(cookieValue);
+      return cookieValue;
+  }
+  var csrftoken = getCookie('csrftoken');
+
+  /* Set header on AJAX request */
+
+  function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+  }
+  $.ajaxSetup({
+      beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+              xhr.setRequestHeader("X-CSRFToken", csrftoken);
+          }
+      }
+  });
+
+  /*AJAX request to send HTML5 position to Django*/
+  function showPosition(position) {
+      $.ajax({
+        type: 'POST',
+        url: '/wtfsiw/query/',
+        data: position,
+        success: function(result){
+          console.log(result);
+        }
+      });
+  }
+  getLocation();
+</script>
+
+</body>
+</html>
