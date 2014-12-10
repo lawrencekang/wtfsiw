@@ -26,9 +26,9 @@ import oauth2
 
 
 API_HOST = 'api.yelp.com'
-DEFAULT_TERM = 'dinner'
+DEFAULT_TERM = 'wifi cafe'
 DEFAULT_LOCATION = 'San Francisco, CA'
-SEARCH_LIMIT = 5
+SEARCH_LIMIT = 10
 SEARCH_PATH = '/v2/search/'
 BUSINESS_PATH = '/v2/business/'
 
@@ -53,7 +53,9 @@ def request(host, path, url_params=None):
     Raises:
         urllib2.HTTPError: An error occurs from the HTTP request.
     """
-    url_params = url_params or {}
+    url_params = url_params or {
+        category_filter: 'internetcafe'
+    }
     url = 'http://{0}{1}?'.format(host, path)
 
     consumer = oauth2.Consumer(CONSUMER_KEY, CONSUMER_SECRET)

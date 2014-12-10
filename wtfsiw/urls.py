@@ -6,6 +6,6 @@ urlpatterns = patterns('',
     # ex: /polls/
     url(r'^$', views.index, name='index'),
     # ex: /polls/5/
-    url(r'^query/$', views.query, name='results'),
-    
+    url(r'^result/$', views.result, name='result'),
+
 )

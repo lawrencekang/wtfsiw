@@ -1,11 +1,11 @@
 <html>
 <head>
-  <title>Search</title>
+  <title>WTFSIW</title>
   <h1>Where the F^@$ Should I Work?</h1>
 
 </head>
 <body>
-    <form action="/wtfsiw/query/" method="post">
+    <form action="/wtfsiw/" method="post">
         {% csrf_token %}
         <input type="text" name="location-input">
         <input type="submit" value="Search">
@@ -63,7 +63,7 @@
   function showPosition(position) {
       $.ajax({
         type: 'POST',
-        url: '/wtfsiw/query/',
+        url: '/wtfsiw/',
         data: position,
         success: function(result){
           console.log(result);
