@@ -11,7 +11,7 @@
         <input type="submit" value="Search">
     </form>
     <div id="demo"> </div>
-
+<div id="loading"> </div>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
@@ -61,28 +61,38 @@
 
   /* AJAX request to send HTML5 position to Django*/
   function sendPosition(position) {
-      $.ajax({
-        type: 'POST',
-        url: '/wtfsiw/',
-        data: position,
-        success: function(result){
-          result = JSON.parse(result);
-          var userAddress = result[0];
-          var yelpResults = result[1];
-          /* Save the Yelp API results in localStorage, and randomly generate the first location */
-          localStorage.setItem('userAddress', userAddress);
-          localStorage.setItem('yelpResults', yelpResults);
-          var yelpResultsParsed = JSON.parse(yelpResults);
-          var randomIndex = Math.floor(Math.random()*yelpResultsParsed.length);
-          var randomLoc = yelpResultsParsed[randomIndex];
-          $.get('/wtfsiw/results/', randomLoc, function(data){
-            $('body').html(data);
-          });
-        },
-        error: function(error, parserror){
-          console.log(error);
-        }
-      });
+    $('#loading').text('loading')
+    $.ajax({
+      type: 'POST',
+      url: '/wtfsiw/',
+      data: position,
+      success: function(result){
+        if (result === null)
+          {console.log('null')}
+        result = JSON.parse(result);
+        var userAddress = result[0];
+        var yelpResults = result[1];
+        /* Save the Yelp API results in localStorage, and randomly generate the first location */
+        localStorage.setItem('userAddress', userAddress);
+        localStorage.setItem('yelpResults', yelpResults);
+        console.log('yelpResults');
+        var yelpResultsParsed = JSON.parse(yelpResults);
+                console.log(yelpResultsParsed);
+        var randomIndex = Math.floor(Math.random()*yelpResultsParsed.length);
+        var randomLoc = yelpResultsParsed[randomIndex];
+        console.log(userAddress);
+        dataToSend = {
+          userAddress: userAddress,
+          randomLoc: randomLoc
+        };
+        $.get('/wtfsiw/results/', dataToSend, function(data){
+          $('body').html(data);
+        });
+      },
+      error: function(error, parserror){
+        console.log(error);
+      }
+    });
   }
   getLocation();
 </script>

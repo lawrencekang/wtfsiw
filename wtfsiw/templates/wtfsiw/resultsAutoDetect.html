@@ -1,0 +1,38 @@
+<body>
+  <div>Why Don't You Work at</div>
+  <div>{{ name }}</div>
+  <div>{{ test }}</div>
+  <div>{{ destination_address }}</div>
+  <div>{{ city }}</div>
+  <div>{{ user_address }}</div>
+
+<script type="text/javascript">
+console.log(yelp_results);
+var yelp_results = JSON.stringify({{yelp_results}});
+console.log(yelp_results);
+if (yelp_results)
+  localStorage.setItem('yelpResults', yelp_results);
+
+if ("{{user_address}}")
+  localStorage.setItem('userAddress', "{{user_address}}");
+
+if (localStorage.getItem('localStorage')){
+  
+}
+
+</script>
+
+
+<iframe
+  width="600"
+  height="450"
+  frameborder="0" style="border:0"
+  src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyC79P2ZFj_saak3KTkIFg0ggSXtLh7ShEM
+    &origin={{user_address}}
+    &destination={{destination_address}}+{{city}}">
+</iframe>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+</body>
