@@ -40,7 +40,6 @@
               }
           }
       }
-      console.log(cookieValue);
       return cookieValue;
   }
   var csrftoken = getCookie('csrftoken');
@@ -67,6 +66,9 @@
         data: position,
         success: function(result){
           console.log(result);
+        },
+        error: function(error, parserror){
+          console.log(error, parserror);
         }
       });
   }
