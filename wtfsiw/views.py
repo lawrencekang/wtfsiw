@@ -4,7 +4,7 @@ import yelp
 import requests
 import json
 from django.utils.safestring import mark_safe
-
+import random
 
 from wtfsiw.models import User, Location
 # import logging
@@ -14,9 +14,8 @@ def index(request):
     # Render index.html on a GET request
     if request.method == 'GET':
         return render(request, 'wtfsiw/index.html')
-    # Invoke Yelp API based on auto-detected location
+    # Flow for auto-detected location
     if request.method == 'POST' and request.POST.get('location-input') is None:
-        # print 'auto-detect'
         latitude = request.POST.get('coords[latitude]')
         longitude = request.POST.get('coords[longitude]')
         r = requests.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=%s,%s" %(str(latitude), str(longitude)))
@@ -28,17 +27,17 @@ def index(request):
         else:
             return 'nothing here'
 
-     # Invoke Yelp API on user-submitted location
+     # Flow for user-submitted location
     if request.method == 'POST' and request.POST.get('location-input') is not None:
         submitted_loc = request.POST.get('location-input')
-        # print submitted_loc
-        search_result = mark_safe(json.dumps(yelp.search('internet', submitted_loc)['businesses']))
-        print "hello"
-        print search_result
+        # mark_safe used to prevent unicode and HTML conversion
+        yelp_result = (yelp.search('internet', submitted_loc)['businesses'])
+        safe_result = mark_safe(json.dumps(yelp_result))
+        random_result = yelp_result[random.randrange(len(yelp_result))]
         template_data = {
-          'name': 'user-submitted',
+          'name': random_result.get('name'),
           'test': 'test user',
-          'yelpResults': search_result
+          'yelpResults': safe_result
         }
 
         return render(request, 'wtfsiw/results.html', template_data)
@@ -52,16 +51,4 @@ def results(request):
     return render(request, 'wtfsiw/results.html', template_data)
 
 def profile(request):
-    return HttpResponse('profile goes here')
-
-#def index(request):
-
-    #return HttpResponse("Hello, world. You're at the polls index.")
-
-#def results(request):
-
-# def profile(request):
-#     template = loader.get_template('templates/index.html')
-#     users = User.objects.all()
-#     #output = ','.join([u.first_name for p in u])
-#     return HttpResponse(users)
+    return HttpResponse('profile data goes here')
