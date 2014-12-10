@@ -2,13 +2,28 @@
   <div>Why Don't You Work at</div>
   <div>{{ name }}</div>
   <div>{{ test }}</div>
+  <div>{{ user_address }}</div>
+  <div>{{ destination_address }}</div>
+  <div>{{ city }}</div>
+
+
+
+<iframe
+  width="600"
+  height="450"
+  frameborder="0" style="border:0"
+  src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyC79P2ZFj_saak3KTkIFg0ggSXtLh7ShEM
+    &origin={{user_address}}
+    &destination={{destination_address}}+{{city}}">
+</iframe>
+
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
 <script type="text/javascript">
-var yelpResults = JSON.stringify({{yelpResults}})
-if (yelpResults)
-localStorage.setItem('yelpResults', yelpResults);
+var yelp_results = JSON.stringify({{yelp_results}})
+if (yelp_results)
+localStorage.setItem('yelpResults', yelp_results);
 
 </script>
 

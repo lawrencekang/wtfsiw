@@ -65,8 +65,12 @@
         type: 'POST',
         url: '/wtfsiw/',
         data: position,
-        success: function(yelpResults){
+        success: function(result){
+          result = JSON.parse(result);
+          var userAddress = result[0];
+          var yelpResults = result[1];
           /* Save the Yelp API results in localStorage, and randomly generate the first location */
+          localStorage.setItem('userAddress', userAddress);
           localStorage.setItem('yelpResults', yelpResults);
           var yelpResultsParsed = JSON.parse(yelpResults);
           var randomIndex = Math.floor(Math.random()*yelpResultsParsed.length);

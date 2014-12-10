@@ -5,6 +5,8 @@ import requests
 import json
 from django.utils.safestring import mark_safe
 import random
+from django.views.decorators.clickjacking import xframe_options_exempt
+
 
 from wtfsiw.models import User, Location
 # import logging
@@ -23,7 +25,9 @@ def index(request):
             address = r.json()['results'][0]['formatted_address']
             search_result = json.dumps(yelp.search('internet', address)['businesses'])
             # return the data to complete the AJAX call, and invoke a GET request for the Result page
-            return HttpResponse(search_result)
+            package = json.dumps([address, search_result])
+            print package
+            return HttpResponse(package)
         else:
             return 'nothing here'
 
@@ -34,20 +38,25 @@ def index(request):
         yelp_result = (yelp.search('internet', submitted_loc)['businesses'])
         safe_result = mark_safe(json.dumps(yelp_result))
         random_result = yelp_result[random.randrange(len(yelp_result))]
+        print random_result.get('location')['address']
         template_data = {
           'name': random_result.get('name'),
-          'test': 'test user',
-          'yelpResults': safe_result
+          'yelp_results': safe_result,
+          'user_address': submitted_loc,
+          'destination_address': random_result.get('location')['address'][0],
+          'city': random_result.get('location')['city']
         }
 
         return render(request, 'wtfsiw/results.html', template_data)
         #return render(request, 'wtfsiw/result.html')
     
 def results(request):
-    print request.GET.get('name')
     template_data = {
-      'name': request.GET.get('name')
+      'name': request.GET.get('name'),
+      'destination_address': request.GET.get('location[address][]'),
+      'city': request.GET.get('location[city]')
     }
+    print template_data
     return render(request, 'wtfsiw/results.html', template_data)
 
 def profile(request):
