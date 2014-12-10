@@ -60,15 +60,18 @@
 
   /*AJAX request to send HTML5 position to Django*/
   function showPosition(position) {
+
       $.ajax({
         type: 'POST',
         url: '/wtfsiw/',
         data: position,
         success: function(result){
-          console.log(result);
+          $.get('/wtfsiw/result/', function(data){
+            $('body').replaceWith(data);
+          });
         },
         error: function(error, parserror){
-          console.log(error, parserror);
+          console.log(error);
         }
       });
   }
