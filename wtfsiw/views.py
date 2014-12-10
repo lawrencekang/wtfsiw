@@ -2,12 +2,13 @@ from django.http import HttpResponse
 from django.shortcuts import render
 import yelp
 import requests
+import json
+from django.utils.safestring import mark_safe
 
 
 from wtfsiw.models import User, Location
 # import logging
 # logger = logging.getLogger('MYAPP')
-
 
 def index(request):
     # Render index.html on a GET request
@@ -21,11 +22,9 @@ def index(request):
         r = requests.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=%s,%s" %(str(latitude), str(longitude)))
         if r:
             address = r.json()['results'][0]['formatted_address']
-            search_result = yelp.search('internet', address)['businesses']
+            search_result = json.dumps(yelp.search('internet', address)['businesses'])
             # return the data to complete the AJAX call, and invoke a GET request for the Result page
             return HttpResponse(search_result)
-
-
         else:
             return 'nothing here'
 
@@ -33,15 +32,24 @@ def index(request):
     if request.method == 'POST' and request.POST.get('location-input') is not None:
         submitted_loc = request.POST.get('location-input')
         # print submitted_loc
-        search_result = yelp.search('internet', submitted_loc)['businesses']
-        # print search_result
-        return HttpResponse(search_result)
+        search_result = mark_safe(json.dumps(yelp.search('internet', submitted_loc)['businesses']))
+        print "hello"
+        print search_result
+        template_data = {
+          'name': 'user-submitted',
+          'test': 'test user',
+          'yelpResults': search_result
+        }
+
+        return render(request, 'wtfsiw/results.html', template_data)
         #return render(request, 'wtfsiw/result.html')
     
-def result(request):
-    print 'result path'
-    print request
-    return render(request, 'wtfsiw/results.html', {'test':'hello'})
+def results(request):
+    print request.GET.get('name')
+    template_data = {
+      'name': request.GET.get('name')
+    }
+    return render(request, 'wtfsiw/results.html', template_data)
 
 def profile(request):
     return HttpResponse('profile goes here')

@@ -5,7 +5,7 @@
 
 </head>
 <body>
-    <form action="/wtfsiw/" method="post">
+    <form id="locSearch" action="/wtfsiw/" method="post">
         {% csrf_token %}
         <input type="text" name="location-input">
         <input type="submit" value="Search">
@@ -18,9 +18,10 @@
 
 <!-- HTML5 geolocation scripting -->
 <script type="text/javascript">
+
   function getLocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
+        navigator.geolocation.getCurrentPosition(sendPosition);
     } else {
         console.log("Why you no position?");
     }
@@ -58,16 +59,20 @@
       }
   });
 
-  /*AJAX request to send HTML5 position to Django*/
-  function showPosition(position) {
-
+  /* AJAX request to send HTML5 position to Django*/
+  function sendPosition(position) {
       $.ajax({
         type: 'POST',
         url: '/wtfsiw/',
         data: position,
-        success: function(result){
-          $.get('/wtfsiw/result/', function(data){
-            $('body').replaceWith(data);
+        success: function(yelpResults){
+          /* Save the Yelp API results in localStorage, and randomly generate the first location */
+          localStorage.setItem('yelpResults', yelpResults);
+          var yelpResultsParsed = JSON.parse(yelpResults);
+          var randomIndex = Math.floor(Math.random()*yelpResultsParsed.length);
+          var randomLoc = yelpResultsParsed[randomIndex];
+          $.get('/wtfsiw/results/', randomLoc, function(data){
+            $('body').html(data);
           });
         },
         error: function(error, parserror){
