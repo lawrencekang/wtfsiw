@@ -41,15 +41,25 @@ WTFSIW, for quick and easy wifi cafe recommendations.
 
 ### Roadmap
 
+Implemented Features:
 
+[x] Yelp API integration
+[x] Google Maps reverse geocoding
+[x] Google Embed Maps API integration
+[x] Browser location lookup
+[x] Allow users to search by address
+[x] Store data in localStorage
+[x] Go to next result
 
-View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
+Open Issues:
+[ ] Implement Oauth/authentication by service
+[ ] Implement persistent storage using Django API
+[ ] Testing!
+[ ] Deployment
 
+View the project roadmap [https://github.com/lawrencekang/wtfsiw/issues](LINK_TO_PROJECT_ISSUES)
 
-## Contributing
-
-See [Contributing.md](Contributing.md) for contribution guidelines.
 
 ## Testing
 
-A testing framework has been set up using Mocha and Chai.  The files can be found in the app/test/ folder in this repo.  From within the app/test/ folder, run npm install angular-mocks to install this dependency.  
+TBD
