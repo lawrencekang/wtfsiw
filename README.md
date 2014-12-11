@@ -19,7 +19,7 @@ WTFSIW, for quick and easy wifi cafe recommendations.
 
 ## Usage
 
-> WTFSIW can provide you a local wifi cafe to work at based on your location.  Your location can be detected through your browser, or entered manually.  If you don't like the recommendation, click on the button to get additional recommendations.
+> WTFSIW can provide you a local wifi cafe to work at based on your location.  Your location can be detected through your browser, or entered manually.  If you don't like the recommendation, click on the provided button to get additional recommendations.
 
 ## Requirements
 
@@ -37,7 +37,9 @@ WTFSIW, for quick and easy wifi cafe recommendations.
 
 1.  Clone the repo
 1.  Navigate to the folder
-1.  At the command line, enter: "pip install -r requirements.txt"
+1.  Enter on command line: "pip install -r requirements.txt"
+1.  Enter on command line: "python manage.py runserver"
+1.  Navigate to localhost:8000
 
 ### Roadmap
 

@@ -1,5 +1,5 @@
 $( document ).ready(function() {
-// Attach event listener
+// Attach event listener to reload map and titleblock with new location data
   $(document.body).on('click', 'div.noGo', function(){
     var nextLoc = generateNextLoc();
     var dataToSend = {
@@ -13,6 +13,7 @@ $( document ).ready(function() {
   });
 });
 
+// HTML5 geolocation script
 function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(sendPosition);
@@ -39,7 +40,7 @@ function getCookie(name) {
 }
 var csrftoken = getCookie('csrftoken');
 
-/* Set header on AJAX request */
+// Set header on AJAX request 
 
 function csrfSafeMethod(method) {
   // these HTTP methods do not require CSRF protection
@@ -54,7 +55,7 @@ $.ajaxSetup({
     }
 });
 
-/* AJAX POST to send HTML5 position to Django server*/
+// AJAX POST to send browser-based HTML5 position to Django server
 function sendPosition(position) {
   $('#loading').text('looking up a place to work');
   $.post('/wtfsiw/results/', position, function(data){
@@ -64,12 +65,11 @@ function sendPosition(position) {
   });
 }
 
-
-// Functions needed for the Results template
+// Save to localStorage when loading Results template
 
 var resultsFunc = function(data){
 
-  if (!localStorage.getItem('yelpResults'))
+  if (data.yelpResults !== localStorage.getItem('yelpResults'))
     localStorage.setItem('yelpResults', data.yelpResults);
 
   if (data.userAdress !== localStorage.getItem('userAddress'))
@@ -78,6 +78,8 @@ var resultsFunc = function(data){
   if (localStorage.getItem('localStorage')){}
 };
 
+// Randomize location data from localStorage
+
 var generateNextLoc = function(){
   var storedResultsParsed = JSON.parse(localStorage.getItem('yelpResults'));
   var randomIndex = Math.floor(Math.random()*storedResultsParsed.length);
@@ -85,6 +87,7 @@ var generateNextLoc = function(){
 
   return randomLoc;
 };
+
 
 
 
