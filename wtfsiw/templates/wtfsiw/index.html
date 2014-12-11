@@ -7,9 +7,10 @@
   </div>
 </head>
 <body>
+
 <div class="app">
   <div class="center search index">
-      <form id="locSearch" action="/wtfsiw/" method="post">
+      <form id="locSearch" action="/wtfsiw/results/" method="post">
           {% csrf_token %}
           <input type="text" name="location-input">
           <input type="submit" value="Search">
@@ -21,6 +22,11 @@
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="{% static 'wtfsiw/wtfsiw.js' %}"></script>
+
+<script type=text/javascript> 
+getLocation();
+</script>
+
 <link rel="stylesheet" type="text/css" href="{% static 'wtfsiw/style.css' %}" />
 </body>
 </html>

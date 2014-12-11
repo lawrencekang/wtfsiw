@@ -9,7 +9,7 @@
 </head>
 <body>
   <div class="center search">
-    <form id="locSearch" action="/wtfsiw/" method="post">
+    <form id="locSearch" action="/wtfsiw/results/" method="post">
         {% csrf_token %}
         <input type="text" name="location-input">
         <input type="submit" value="Search">
