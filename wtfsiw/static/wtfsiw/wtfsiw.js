@@ -1,29 +1,5 @@
-<html>
-{% load staticfiles %}
-<head>
-  <title>WTFSIW</title>
-  <div class="center titleblock index"> 
-    <h1>Where the F^@$ Should I Work?</h1>
-  </div>
-</head>
-<body>
-  <div class="center search index">
-    <form id="locSearch" action="/wtfsiw/" method="post">
-        {% csrf_token %}
-        <input type="text" name="location-input">
-        <input type="submit" value="Search">
-    </form>
-  <div id="loading"> </div>
-  </div>
-
-<script src="{% static 'wtfsiw/wtfsiw.js' %}"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<link rel="stylesheet" type="text/css" href="{% static 'wtfsiw/style.css' %}" />
-
-
-<!-- HTML5 geolocation scripting -->
-<script type="text/javascript">
-
+$( document ).ready(function() {
+  // Get user's location from browser 
   function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(sendPosition);
@@ -32,7 +8,7 @@
     }
   }
 
-  /* Generate CSRF token for AJAX request below */
+  // Generate CSRF token for AJAX request below 
   function getCookie(name) {
       var cookieValue = null;
       if (document.cookie && document.cookie !=='') {
@@ -64,16 +40,16 @@
       }
   });
 
-  /* AJAX request to send HTML5 position to Django*/
+  /* AJAX POST to send HTML5 position to Django server*/
   function sendPosition(position) {
-    $('#loading').text('looking up a place to work')
+    $('#loading').text('looking up a place to work');
     $.ajax({
       type: 'POST',
       url: '/wtfsiw/',
       data: position,
       success: function(result){
         if (result === null)
-          {return "null, yo";}
+          {return "null, yo. something wrong with your address - try searching again.";}
         result = JSON.parse(result);
         var userAddress = result[0];
         var yelpResults = result[1];
@@ -97,8 +73,45 @@
       }
     });
   }
-  getLocation();
-</script>
 
-</body>
-</html>
+getLocation();
+
+// Functions needed for the Results template
+
+(function(){
+  var yelp_results = JSON.stringify( {{yelp_results}} );
+
+  if (!localStorage.getItem('yelpResults'))
+    localStorage.setItem('yelpResults', yelp_results);
+
+  if ("{{user_address}}" !== localStorage.getItem('userAddress'))
+    localStorage.setItem('userAddress', "{{user_address}}");
+
+  if (localStorage.getItem('localStorage')){}
+
+  var generateNextLoc = function(){
+    var storedResultsParsed = JSON.parse(localStorage.getItem('yelpResults'));
+    var randomIndex = Math.floor(Math.random()*storedResultsParsed.length);
+    var randomLoc = storedResultsParsed[randomIndex];
+
+    return randomLoc;
+  };
+
+})();
+
+// Attach event listener
+(function(){
+  $('document.body').on('click', 'div.noGo', function(){
+    var nextLoc = generateNextLoc();
+    var dataToSend = {
+      userAddress:localStorage.getItem('userAddress'),
+      randomLoc: nextLoc
+    };
+
+    $.get('/wtfsiw/results/', dataToSend, function(data){
+      $('body').html(data);
+    });
+  });
+})();
+
+});

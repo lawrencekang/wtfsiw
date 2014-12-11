@@ -1,34 +1,16 @@
+<title>WTFSIW</title>
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'wtfsiw/style.css' %}" />
+
 <body>
-  <div id="LocationInfo">
-    <div>Why Don't You Work Here:</div>
-    <div>{{ name }}</div>
+  <div class="center titleblock">
+    <h1>Why Don't You Work Here:</h1>
+    <h2>{{ name }}</h2>
     <div>{{ destination_address }}</div>
     <div>{{ city }}</div>
   </div>
 
-<script type="text/javascript">
-var yelp_results = JSON.stringify({{yelp_results}});
-
-if (!localStorage.getItem('yelp_results'))
-  localStorage.setItem('yelpResults', yelp_results);
-
-if ("{{user_address}}")
-  localStorage.setItem('userAddress', "{{user_address}}");
-
-if (localStorage.getItem('localStorage')){}
-
-var generateNextLoc = function(){
-  var randomIndex = Math.floor(Math.random()*yelpResultsParsed.length)
-  var randomLoc = yelpResultsParsed[randomIndex]
-}
-
-
-
-
-
-</script>
-
-<div class="mapdiv">
+<div class="mapdiv, center">
   <iframe
     width="600"
     height="450"
@@ -39,9 +21,14 @@ var generateNextLoc = function(){
   </iframe>
 </div>
 
-<div>Naw, not this one</div>
+<!-- Using a reroute because trying to encode the Django csrf tag in an HTML string didn't work -->
+<div class="center options">
 
+<div class="linkDiv"><a href="/wtfsiw/retry/">You got the address wrong.</br> Try Again.</a></div>
 
+<div class="linkDiv noGo"><sp>Naw, not this one.</sp></br><sp>Give me another.</sp></div>
+
+</div>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
