@@ -1,0 +1,48 @@
+<html>
+{% load staticfiles %}
+<head>
+  <title>WTFSIW</title>
+</head>
+<body>
+
+<link rel="stylesheet" type="text/css" href="{% static 'wtfsiw/style.css' %}" />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="{% static 'wtfsiw/wtfsiw.js' %}"></script>
+
+<div class="titleblock map">
+  <div class="center titleblock">
+    <h1>Why Don't You Work Here:</h1>
+    <h2>{{ name }}</h2>
+    <div>{{ destination_address }}</div>
+    <div>{{ city }}</div>
+  </div>
+
+  <div class="mapdiv, center">
+    <iframe
+      width="600"
+      height="450"
+      frameborder="0" style="border:0"
+      src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyC79P2ZFj_saak3KTkIFg0ggSXtLh7ShEM
+        &origin={{user_address}}
+        &destination={{destination_address}}+{{city}}">
+    </iframe>
+  </div>
+</div>
+
+<!-- Using a reroute because trying to encode the Django csrf tag in an HTML string didn't work -->
+<div class="center options">
+
+<div class="linkDiv"><a href="/wtfsiw/retry/">You got the address wrong.</br> Try Again.</a></div>
+
+<div class="linkDiv noGo"><sp>Naw, not this one.</sp></br><sp>Give me another.</sp></div>
+
+</div>
+
+<script type="text/javascript">
+  var dataHolder = {
+    yelpResults: JSON.stringify({{yelp_results}}),
+    userAddress: '{{user_address}}'
+  }
+  resultsFunc(dataHolder);
+</script>
+</body>

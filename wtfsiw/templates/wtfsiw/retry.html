@@ -1,0 +1,21 @@
+<html>
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'wtfsiw/style.css' %}" />
+<head>
+  <title>WTFSIW</title>
+    <div class="center titleblock">
+      <h1>Why Don't You Try Again?</h1>
+    </div>
+</head>
+<body>
+  <div class="center search">
+    <form id="locSearch" action="/wtfsiw/results/" method="post">
+        {% csrf_token %}
+        <input type="text" name="location-input">
+        <input type="submit" value="Search">
+    </form>
+  <div id="loading"> </div>
+  </div>
+
+</body>
+</html>

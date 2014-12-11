@@ -11,4 +11,4 @@ class LocationAdmin(admin.ModelAdmin):
     fields = ['user', 'business_name', 'address', 'location', 'phone']
     list_display = ('business_name', 'address')
 admin.site.register(User, UserAdmin)
-admin.site.register(Location, LocationAdmin)
+admin.site.register(Location, LocationAdmin) 

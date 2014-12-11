@@ -1,9 +1,32 @@
-{% if users %}
-    <ul>
-    {% for user in users %}
-        <li><a href="/index/{{ user.id }}/">{{ user.first_name }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No users are available.</p>
-{% endif %}
+<html>
+{% load staticfiles %}
+<head>
+  <title>WTFSIW</title>
+  <div class="center titleblock index"> 
+    <h1>Where the F^@$ Should I Work?</h1>
+  </div>
+</head>
+<body>
+
+<div class="app">
+  <div class="center search index">
+      <form id="locSearch" action="/wtfsiw/results/" method="post">
+          {% csrf_token %}
+          <input type="text" name="location-input">
+          <input type="submit" value="Search">
+      </form>
+    <div id="loading"> </div>
+  </div>
+
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="{% static 'wtfsiw/wtfsiw.js' %}"></script>
+
+<script type=text/javascript> 
+getLocation();
+</script>
+
+<link rel="stylesheet" type="text/css" href="{% static 'wtfsiw/style.css' %}" />
+</body>
+</html>

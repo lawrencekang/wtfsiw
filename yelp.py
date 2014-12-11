@@ -26,9 +26,9 @@ import oauth2
 
 
 API_HOST = 'api.yelp.com'
-DEFAULT_TERM = 'dinner'
+DEFAULT_TERM = 'wifi cafe'
 DEFAULT_LOCATION = 'San Francisco, CA'
-SEARCH_LIMIT = 3
+SEARCH_LIMIT = 20
 SEARCH_PATH = '/v2/search/'
 BUSINESS_PATH = '/v2/business/'
 
@@ -70,7 +70,6 @@ def request(host, path, url_params=None):
     token = oauth2.Token(TOKEN, TOKEN_SECRET)
     oauth_request.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer, token)
     signed_url = oauth_request.to_url()
-    
     print 'Querying {0} ...'.format(url)
 
     conn = urllib2.urlopen(signed_url, None)
@@ -95,7 +94,10 @@ def search(term, location):
     url_params = {
         'term': term.replace(' ', '+'),
         'location': location.replace(' ', '+'),
-        'limit': SEARCH_LIMIT
+        'limit': SEARCH_LIMIT,
+        # URL search parameter to narrow results to internet + coffee
+        'category_filter': 'coffee'
+
     }
     return request(API_HOST, SEARCH_PATH, url_params=url_params)
 
