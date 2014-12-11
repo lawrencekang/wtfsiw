@@ -23,14 +23,13 @@ def index(request):
         latitude = request.POST.get('coords[latitude]')
         longitude = request.POST.get('coords[longitude]')
         r = requests.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=%s,%s" %(str(latitude), str(longitude)))
-        if r:
-            address = r.json()['results'][0]['formatted_address']
-            search_result = json.dumps((yelp.search('wifi', address)['businesses']))
-            # return the data to complete the AJAX call, and invoke a GET request for the Result page
-            package = json.dumps([address, search_result])
-            return HttpResponse(package)
-        else:
-            return 'nothing here'
+
+        address = r.json()['results'][0]['formatted_address']
+        search_result = json.dumps((yelp.search('wifi', address)['businesses']))
+        # return the data to complete the AJAX call, and invoke a GET request for the Result page
+        package = json.dumps([address, search_result])
+        return HttpResponse(package)
+
 
      # Flow for user-submitted location
     if request.method == 'POST' and request.POST.get('location-input') is not None:
@@ -47,10 +46,12 @@ def index(request):
                 'destination_address': random_result.get('location')['address'][0],
                 'city': random_result.get('location')['city']
             }
-
-            return render(request, 'wtfsiw/results.html', template_data)
+            # return render(request, 'wtfsiw/results.html', template_data)
+            return 'ok'
+            self.results(request)
         else:
             return HttpResponse("null")
+
             
 def results(request):
     template_data = {

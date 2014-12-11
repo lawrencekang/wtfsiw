@@ -41,6 +41,8 @@ WTFSIW, for quick and easy wifi cafe recommendations.
 
 ### Roadmap
 
+
+
 View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
 
 

@@ -1,8 +1,11 @@
 <title>WTFSIW</title>
 {% load staticfiles %}
 <link rel="stylesheet" type="text/css" href="{% static 'wtfsiw/style.css' %}" />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="{% static 'wtfsiw/wtfsiw.js' %}">
+  
+</script>
 
-<body>
   <div class="center titleblock">
     <h1>Why Don't You Work Here:</h1>
     <h2>{{ name }}</h2>
@@ -30,6 +33,10 @@
 
 </div>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
-</body>
+<script type="text/javascript">
+  var dataHolder = {
+    yelpResults: JSON.stringify({{yelp_results}}),
+    userAddress: '{{user_address}}'
+  }
+  resultsFunc(dataHolder);
+</script>

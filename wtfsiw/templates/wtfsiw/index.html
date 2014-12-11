@@ -7,98 +7,20 @@
   </div>
 </head>
 <body>
+<div class="app">
   <div class="center search index">
-    <form id="locSearch" action="/wtfsiw/" method="post">
-        {% csrf_token %}
-        <input type="text" name="location-input">
-        <input type="submit" value="Search">
-    </form>
-  <div id="loading"> </div>
+      <form id="locSearch" action="/wtfsiw/" method="post">
+          {% csrf_token %}
+          <input type="text" name="location-input">
+          <input type="submit" value="Search">
+      </form>
+    <div id="loading"> </div>
   </div>
 
-<script src="{% static 'wtfsiw/wtfsiw.js' %}"></script>
+</div>
+
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="{% static 'wtfsiw/wtfsiw.js' %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'wtfsiw/style.css' %}" />
-
-
-<!-- HTML5 geolocation scripting -->
-<script type="text/javascript">
-
-  function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(sendPosition);
-    } else {
-        console.log("Why you no position?");
-    }
-  }
-
-  /* Generate CSRF token for AJAX request below */
-  function getCookie(name) {
-      var cookieValue = null;
-      if (document.cookie && document.cookie !=='') {
-          var cookies = document.cookie.split(';');
-          for (var i = 0; i < cookies.length; i++) {
-              var cookie = jQuery.trim(cookies[i]);
-              // Does this cookie string begin with the name we want?
-              if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                  break;
-              }
-          }
-      }
-      return cookieValue;
-  }
-  var csrftoken = getCookie('csrftoken');
-
-  /* Set header on AJAX request */
-
-  function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-  }
-  $.ajaxSetup({
-      beforeSend: function(xhr, settings) {
-          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-              xhr.setRequestHeader("X-CSRFToken", csrftoken);
-          }
-      }
-  });
-
-  /* AJAX request to send HTML5 position to Django*/
-  function sendPosition(position) {
-    $('#loading').text('looking up a place to work')
-    $.ajax({
-      type: 'POST',
-      url: '/wtfsiw/',
-      data: position,
-      success: function(result){
-        if (result === null)
-          {return "null, yo";}
-        result = JSON.parse(result);
-        var userAddress = result[0];
-        var yelpResults = result[1];
-        /* Save the Yelp API results in localStorage, and randomly generate the first location */
-        localStorage.setItem('userAddress', userAddress);
-        localStorage.setItem('yelpResults', yelpResults);
-        var yelpResultsParsed = JSON.parse(yelpResults);
-        var randomIndex = Math.floor(Math.random()*yelpResultsParsed.length);
-        var randomLoc = yelpResultsParsed[randomIndex];
-        console.log(userAddress);
-        dataToSend = {
-          userAddress: userAddress,
-          randomLoc: randomLoc
-        };
-        $.get('/wtfsiw/results/', dataToSend, function(data){
-          $('body').html(data);
-        });
-      },
-      error: function(error){
-        console.log(error);
-      }
-    });
-  }
-  getLocation();
-</script>
-
 </body>
 </html>
